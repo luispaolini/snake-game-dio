@@ -8,16 +8,18 @@ snake[0] = {
   y: 8 * box,
 };
 
+// default direction
 let direction = "right";
 
-let food = criarComida();
+// create food in a random position
+let food = createRandomFood();
 
-function criarBG() {
+function createBG() {
   context.fillStyle = "lightgreen";
   context.fillRect(0, 0, 16 * box, 16 * box);
 }
 
-function criarCobrinha() {
+function createSnake() {
   for (let i = 0; i < snake.length; i++) {
     context.fillStyle = "green";
     context.fillRect(snake[i].x, snake[i].y, box, box);
@@ -29,7 +31,7 @@ function drawFood() {
   context.fillRect(food.x, food.y, box, box);
 }
 
-function criarComida() {
+function createRandomFood() {
   return {
     x: Math.floor(Math.random() * 15 + 1) * box,
     y: Math.floor(Math.random() * 15 + 1) * box,
@@ -38,6 +40,7 @@ function criarComida() {
 
 document.addEventListener("keydown", update);
 
+// Move the snake to a chosen direction
 function update(event) {
   if (event.keyCode === 37 && direction !== "right") direction = "left";
   if (event.keyCode === 38 && direction !== "down") direction = "up";
@@ -45,7 +48,8 @@ function update(event) {
   if (event.keyCode === 40 && direction !== "up") direction = "down";
 }
 
-function iniciarJogo() {
+// Prepare the game environment
+function startGame() {
   if (snake[0].x > 15 * box && direction === "right") snake[0].x = 0;
   if (snake[0].x < 0 * box && direction === "left") snake[0].x = 16 * box;
   if (snake[0].y > 15 * box && direction === "down") snake[0].y = 0;
@@ -59,13 +63,14 @@ function iniciarJogo() {
     }
   }
 
-  criarBG();
-  criarCobrinha();
+  createBG();
+  createSnake();
   drawFood();
 
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
 
+  // Updates snake length
   if (direction === "right") snakeX += box;
   if (direction === "left") snakeX -= box;
   if (direction === "up") snakeY -= box;
@@ -74,7 +79,7 @@ function iniciarJogo() {
   if (snakeX !== food.x || snakeY !== food.y) {
     snake.pop();
   } else {
-    food = criarComida();
+    food = createRandomFood();
   }
 
   let newHead = {
@@ -85,4 +90,4 @@ function iniciarJogo() {
   snake.unshift(newHead);
 }
 
-let jogo = setInterval(iniciarJogo, 100);
+let jogo = setInterval(startGame, 100);
